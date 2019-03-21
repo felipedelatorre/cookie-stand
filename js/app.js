@@ -1,10 +1,9 @@
 'use strict';
-
 //---------------------------
 // Define Function
 //---------------------------
 
-//Renders header row
+//Renders header row of times
 var renderRowOfTimes = function(parentElement) {
   var tr = document.createElement('tr');
   parentElement.appendChild(tr);
@@ -27,16 +26,45 @@ var renderRowOfTimes = function(parentElement) {
   tr.appendChild(th);
 };
 
+// Renders last row of totals
+var renderRowOfTotals = function(parentElement, locationStores) {
+  var tr = document.createElement('tr');
+  tr.setAttribute('id', 'totals');
+  parentElement.appendChild(tr);
+
+  var td = document.createElement('td');
+  td.textContent = 'Totals';
+  tr.appendChild(td);
+
+  for (var i = 0; i < locationStores[0]['cookiesPurchasePerHour'].length; i++) {
+    var storeTotals = 0;
+    td = document.createElement('td');
+    for (var j = 0; j < locationStores.length; j++) {
+      storeTotals += locationStores[j].cookiesPurchasePerHour[i];    
+    }
+    td.textContent = storeTotals;
+    tr.appendChild(td);
+  }
+
+  var grandTotal = 0;
+  td = document.createElement('td');
+  for (i = 0; i < locationStores.length; i++) {
+    grandTotal += locationStores[i].getTotalCookies();
+  }
+  td.textContent = grandTotal;
+  tr.appendChild(td);
+};
+
 //Renders cities/sales row
 var renderRow = function(parentElement) {
-  this.addToCookiesList(); //Creates random # of sales
+  this.addToCookiesList(); //Creates random # of sales into the array
   var tr = document.createElement('tr');
   parentElement.appendChild(tr);
 
   var td = document.createElement('td');
   td.textContent = this.storeLocation;
-  tr.appendChild(td);  
-  for (var i = 0; i < 15; i++) {
+  tr.appendChild(td);
+  for (var i = 0; i < this.cookiesPurchasePerHour.length; i++) {
     td = document.createElement('td');
     td.textContent = this.cookiesPurchasePerHour[i];
     tr.appendChild(td);
@@ -47,13 +75,19 @@ var renderRow = function(parentElement) {
 
 };
 
-// Object and Prototypes
+// Deletes Rows by ID
+var deleteRow = function(rowid)  {   
+  var row = document.getElementById(rowid);
+  row.parentNode.removeChild(row);
+};
+
+// Object and Prototypes for stores
 function Store(storeLocation, minCustomers, maxCustomers, avgCookiesPerCustomer, cookiesPurchasePerHour) {
   this.storeLocation = storeLocation;
   this.minCustomers = minCustomers;
   this.maxCustomers = maxCustomers;
   this.avgCookiesPerCustomer = avgCookiesPerCustomer;
-  this.cookiesPurchasePerHour = cookiesPurchasePerHour;
+  this.cookiesPurchasePerHour = cookiesPurchasePerHour || 9999;
 
   centralOregonStores.push(this);
 }
@@ -63,6 +97,7 @@ Store.prototype.avgCustomersPerHour = function() {
 };
 
 Store.prototype.addToCookiesList = function() {
+  this.cookiesPurchasePerHour = [];
   for (var i = 0; i < 15; i++) {
     this.cookiesPurchasePerHour.push(Math.floor(this.avgCustomersPerHour() * this.avgCookiesPerCustomer));
   }
@@ -88,18 +123,37 @@ var centralOregonStores = [];
 // Run Script
 //---------------------------
 
-// Creates parent element
-// var cityListElement = document.getElementById('cityList');
+// Creates parent element and row of times
 var tableOfSales = document.getElementById('salesTable');
-
-var bendStore = new Store('Bend', 23, 65, 6.3, []);
-var redmondStore = new Store('Redmond', 3, 24, 1.2,  []);
-var madrasStore = new Store('Madras', 11, 37, 3.7, []);
-var prinevilleStore = new Store('Prineville', 20, 38, 2.3, []);
-var sistersStore = new Store('Sisters', 2, 16, 4.6, []);
-
-
 renderRowOfTimes(tableOfSales);
-for (var i = 0; i < centralOregonStores.length; i++) {
-  centralOregonStores[i].render(tableOfSales);
-}
+
+//-------------------------
+// Event handlers
+//-------------------------
+var CityForm = document.getElementById('addCityForm');
+
+var addCityEventHandler = function(event){
+  event.preventDefault();
+
+  var verifyElement = document.getElementById('totals');
+  if (verifyElement !== null) {
+    deleteRow('totals');
+  }
+
+
+  var name = event.target.cityName.value;
+  var min = parseInt(event.target.min.value, 10);
+  var max = parseInt(event.target.max.value, 10);
+  var avg = parseInt(event.target.avg.value, 10);
+
+  event.target.reset();
+
+  var city = new Store(name, min, max, avg);
+  city.render(tableOfSales);
+
+  renderRowOfTotals(tableOfSales, centralOregonStores);
+
+};
+
+CityForm.addEventListener('submit', addCityEventHandler);
+
