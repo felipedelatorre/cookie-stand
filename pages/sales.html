@@ -1,54 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Salmon Cookie Shop - Sales </title>
-  <link rel="stylesheet" type="text/css" href="../css/style.css">
-</head>
-<body>
-  <header>
-    <h1>Salmon Cookie Shop - Sales</h1>
-    <img src="../img/salmon.png" alt="This is the logo. A pic of a salmon">
-  </header>
-
-  <nav>
-    <ul>
-      <li>Home</li>
-      <li><a href="./pages/sales.html">Sales</a></li>
-    </ul>
-  </nav>
-
-
-  <section>
-    <form id="addCityForm">
-      <fieldset>
-        <legend>Sales Predictions</legend>
-        <label>City Name</label>
-        <input name="cityName" type="text" />
-        <label>Min Customers</label>
-        <input name="min" type="number" />
-        <label>Max Customers</label>
-        <input name="max" type="number" />
-        <label>Avg cookies sold/Customer</label>
-        <input name="avg" type="number" />
-        <button type="submit">Add City</button>
-      </fieldset>
-    </form>
-  </section>
-
-  <section id="cityList">
-    <table id="salesTable">
-
-      
-    </table>
-  </section>
-
-
-
-
-
-
-
-  <script src="../js/app.js"></script>
-
-</body>
+  <head>
+    <title>Salmon Cookie Shop - Sales </title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+  </head>
+  <body>
+    <header>
+      <h1>Salmon Cookie Shop - Sales</h1>
+      <img src="../img/salmon.png" alt="This is the logo. A pic of a salmon">
+    </header>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="#">Sales</a></li>
+      </ul>
+    </nav>
+    <main>
+      <section>
+        <form id="addCityForm">
+          <fieldset>
+            <legend>Sales Predictions</legend>
+            <label>City Name</label>
+            <input name="cityName" type="text" required/>
+            <label>Min Customers</label>
+            <input name="min" type="number" required/>
+            <label>Max Customers</label>
+            <input name="max" type="number" required/>
+            <label>Avg cookies sold/Customer</label>
+            <input name="avg" type="number" required/>
+            <button type="submit">Add City</button>
+          </fieldset>
+        </form>
+      </section>
+      <section id="cityList">
+        <table id="salesTable">
+        </table>
+      </section>
+    </main>
+    <script src="../js/app.js"></script>
+  </body>
 </html>
