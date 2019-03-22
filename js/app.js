@@ -1,42 +1,27 @@
 'use strict';
+
+//---------------------------
+// Global variables
+//---------------------------
+
+var OPEN_HOURS = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
+var ROW_ATTRIBUTE_FOR_TOTALS = 'totals';
+
 //---------------------------
 // Define Function
 //---------------------------
 
-//Renders header row of times
-var renderRowOfTimes = function(parentElement) {
-  var tr = document.createElement('tr');
-  parentElement.appendChild(tr);
-
-  var th = document.createElement('th');
-  th.textContent = 'City/Times';
-  tr.appendChild(th);
-
-  for (var i = 0; i < 15; i++) {
-    th = document.createElement('th');
-    if (i < 7) {
-      th.textContent = (i+6) + ' am';
-    } else {
-      th.textContent = (i-6) + ' pm';
-    }
-    tr.appendChild(th);
-  }
-  th = document.createElement('th');
-  th.textContent = 'Total';
-  tr.appendChild(th);
-};
-
 // Renders last row of totals
 var renderRowOfTotals = function(parentElement, locationStores) {
   var tr = document.createElement('tr');
-  tr.setAttribute('id', 'totals');
+  tr.setAttribute('id', ROW_ATTRIBUTE_FOR_TOTALS);
   parentElement.appendChild(tr);
 
   var td = document.createElement('td');
   td.textContent = 'Totals';
   tr.appendChild(td);
 
-  for (var i = 0; i < locationStores[0]['cookiesPurchasePerHour'].length; i++) {
+  for (var i = 0; i < locationStores[0].cookiesPurchasePerHour.length; i++) {
     var storeTotals = 0;
     td = document.createElement('td');
     for (var j = 0; j < locationStores.length; j++) {
@@ -76,29 +61,29 @@ var renderRow = function(parentElement) {
 };
 
 // Deletes Rows by ID
-var deleteRow = function(rowid)  {   
-  var row = document.getElementById(rowid);
+var deleteRow = function(rowId)  {
+  var row = document.getElementById(rowId);
   row.parentNode.removeChild(row);
 };
 
 // Object and Prototypes for stores
-function Store(storeLocation, minCustomers, maxCustomers, avgCookiesPerCustomer, cookiesPurchasePerHour) {
+function Store(storeLocation, minCustomers, maxCustomers, avgCookiesPerCustomer) {
   this.storeLocation = storeLocation;
   this.minCustomers = minCustomers;
   this.maxCustomers = maxCustomers;
   this.avgCookiesPerCustomer = avgCookiesPerCustomer;
-  this.cookiesPurchasePerHour = cookiesPurchasePerHour || 9999;
+  this.cookiesPurchasePerHour = [];
 
   centralOregonStores.push(this);
 }
 
 Store.prototype.avgCustomersPerHour = function() {
-  return Math.floor(Math.random() * (this.maxCustomers - this.minCustomers + 1)) + this.minCustomers;
+  var customerSpread = this.maxCustomers - this.minCustomers + 1;
+  return Math.floor(Math.random() * (customerSpread)) + this.minCustomers;
 };
 
 Store.prototype.addToCookiesList = function() {
-  this.cookiesPurchasePerHour = [];
-  for (var i = 0; i < 15; i++) {
+  for (var i = 0; i < OPEN_HOURS.length; i++) {
     this.cookiesPurchasePerHour.push(Math.floor(this.avgCustomersPerHour() * this.avgCookiesPerCustomer));
   }
 };
@@ -125,26 +110,25 @@ var centralOregonStores = [];
 
 // Creates parent element and row of times
 var tableOfSales = document.getElementById('salesTable');
-renderRowOfTimes(tableOfSales);
 
 //-------------------------
 // Event handlers
 //-------------------------
-var CityForm = document.getElementById('addCityForm');
+var cityForm = document.getElementById('addCityForm');
 
 var addCityEventHandler = function(event){
   event.preventDefault();
 
-  var verifyElement = document.getElementById('totals');
+  var verifyElement = document.getElementById(ROW_ATTRIBUTE_FOR_TOTALS);
   if (verifyElement !== null) {
-    deleteRow('totals');
+    deleteRow(ROW_ATTRIBUTE_FOR_TOTALS);
   }
 
-
-  var name = event.target.cityName.value;
-  var min = parseInt(event.target.min.value, 10);
-  var max = parseInt(event.target.max.value, 10);
-  var avg = parseInt(event.target.avg.value, 10);
+  var target = event.target;
+  var name = target.cityName.value;
+  var min = parseInt(target.min.value, 10);
+  var max = parseInt(target.max.value, 10);
+  var avg = parseInt(target.avg.value, 10);
 
   event.target.reset();
 
@@ -155,5 +139,5 @@ var addCityEventHandler = function(event){
 
 };
 
-CityForm.addEventListener('submit', addCityEventHandler);
+cityForm.addEventListener('submit', addCityEventHandler);
 
