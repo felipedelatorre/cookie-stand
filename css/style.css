@@ -1,3 +1,73 @@
-article {
+/* color pallett 7DDF64 C0DF85 #DEB986 */
+* {
+  background-color: #DEB986;
+}
+body {
+  width: 960px;
+  margin: 10px auto 0px auto;
+}
+
+header h1 {
+  text-align: center;
+}
+
+header img{
+  width: 475px;
   display: inline-block;
+}
+
+nav {
+  margin: 20px 0px 0px 0px;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav a {
+  display: block;
+  width: 20%;
+  text-align: center;
+  line-height: 40px;
+  text-decoration: none;
+  background-color: #7DDF64
+}
+
+#locations {
+  display: flex;
+  justify-content: space-between;
+}
+
+#locations img{
+  width: 75%;
+}
+
+#merch {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+#merch p{
+  margin: 10px;
+}
+#merch button{
+  margin: 10px;
+}
+
+#cookies {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+#heroImage img{
+  outline: 2px solid black;
+  display: block;
+  margin: 10px auto;
+}
+
+#aboutUsArticle {
+  display: flex;
+  justify-content: space-between;
+
 }
