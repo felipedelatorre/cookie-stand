@@ -25,7 +25,7 @@ var renderRowOfTotals = function(parentElement, locationStores) {
     var storeTotals = 0;
     td = document.createElement('td');
     for (var j = 0; j < locationStores.length; j++) {
-      storeTotals += locationStores[j].cookiesPurchasePerHour[i];    
+      storeTotals += locationStores[j].cookiesPurchasePerHour[i];
     }
     td.textContent = storeTotals;
     tr.appendChild(td);
@@ -61,7 +61,7 @@ var renderRow = function(parentElement) {
 };
 
 // Deletes Rows by ID
-var deleteRow = function(rowId)  {
+var deleteRow = function(rowId) {
   var row = document.getElementById(rowId);
   row.parentNode.removeChild(row);
 };
